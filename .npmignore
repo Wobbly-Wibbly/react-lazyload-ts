@@ -1,6 +1,7 @@
-examples/
 .babelrc
 .eslintrc
-webpack.config.js
 src/
 test/
+tsconfig.json
+.editorconfig
+.gitignore
