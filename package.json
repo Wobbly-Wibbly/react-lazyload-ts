@@ -1,6 +1,6 @@
 {
   "name": "react-lazyload-ts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Lazyload your components, images or anything where performance matters. Typescript Version",
   "main": "lib/index.js",
   "scripts": {

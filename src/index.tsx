@@ -1,7 +1,7 @@
 /**
  * react-lazyload
  */
-import React, { Component } from 'react';
+import React, { Component, CSSProperties, ReactNode } from 'react';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
@@ -365,6 +365,25 @@ const decorator = (options = {}) =>
       }
     };
   };
+
+export interface LazyLoadProps {
+  once?: boolean | undefined;
+  height?: number | string | undefined;
+  offset?: number | number[] | undefined;
+  overflow?: boolean | undefined;
+  resize?: boolean | undefined;
+  scroll?: boolean | undefined;
+  children?: ReactNode | undefined;
+  throttle?: number | boolean | undefined;
+  debounce?: number | boolean | undefined;
+  placeholder?: ReactNode | undefined;
+  scrollContainer?: string | Element | undefined;
+  unmountIfInvisible?: boolean | undefined;
+  preventLoading?: boolean | undefined;
+  className?: string | undefined;
+  classNamePrefix?: string | undefined;
+  style?: CSSProperties | undefined;
+}
 
 export { decorator as lazyload };
 export default LazyLoad;

@@ -1,7 +1,7 @@
 /**
  * react-lazyload
  */
-import React, { Component } from 'react';
+import React, { Component, CSSProperties, ReactNode } from 'react';
 declare const lazyLoadHandler: () => void;
 /**
  * Forces the component to display regardless of whether the element is visible in the viewport.
@@ -41,6 +41,24 @@ declare const decorator: (options?: {}) => (WrappedComponent: any) => {
     };
     contextType?: React.Context<any> | undefined;
 };
+export interface LazyLoadProps {
+    once?: boolean | undefined;
+    height?: number | string | undefined;
+    offset?: number | number[] | undefined;
+    overflow?: boolean | undefined;
+    resize?: boolean | undefined;
+    scroll?: boolean | undefined;
+    children?: ReactNode | undefined;
+    throttle?: number | boolean | undefined;
+    debounce?: number | boolean | undefined;
+    placeholder?: ReactNode | undefined;
+    scrollContainer?: string | Element | undefined;
+    unmountIfInvisible?: boolean | undefined;
+    preventLoading?: boolean | undefined;
+    className?: string | undefined;
+    classNamePrefix?: string | undefined;
+    style?: CSSProperties | undefined;
+}
 export { decorator as lazyload };
 export default LazyLoad;
 export { lazyLoadHandler as forceCheck };
