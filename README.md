@@ -1,9 +1,15 @@
+# Forked from react-lazyload
+
+Forked from https://github.com/twobin/react-lazyload
+code changed to TS
+Added support for react 18
+
 # Note
 
-This project is now currently maintained by 
+This project is now currently maintained by
 [@ameerthehacker](https://github.com/ameerthehacker), please reach out to him on any issues or help.
 
-----
+---
 
 # react-lazyload [![Build Status](https://travis-ci.org/twobin/react-lazyload.svg)](https://travis-ci.org/twobin/react-lazyload) [![npm version](https://badge.fury.io/js/react-lazyload.svg)](http://badge.fury.io/js/react-lazyload) [![Coverage Status](https://coveralls.io/repos/github/jasonslyvia/react-lazyload/badge.svg?branch=master)](https://coveralls.io/github/jasonslyvia/react-lazyload?branch=master) [![npm downloads](https://img.shields.io/npm/dm/react-lazyload.svg)](https://www.npmjs.com/package/react-lazyload)
 
@@ -15,23 +21,23 @@ Lazyload your Components, Images or anything matters the performance.
 
 ## Why it's better
 
- - Take performance in mind, only 2 event listeners for all lazy-loaded components
- - Support both `one-time lazy load` and `continuous lazy load` mode
- - `scroll` / `resize` event handler is throttled so you won't suffer frequent update, you can switch to debounce mode too
- - Decorator supported
- - Server Side Rendering friendly
- - Thoroughly tested
+- Take performance in mind, only 2 event listeners for all lazy-loaded components
+- Support both `one-time lazy load` and `continuous lazy load` mode
+- `scroll` / `resize` event handler is throttled so you won't suffer frequent update, you can switch to debounce mode too
+- Decorator supported
+- Server Side Rendering friendly
+- Thoroughly tested
 
 ## Installation
 
 > 2.0.0 is finally out, read [Upgrade Guide](https://github.com/twobin/react-lazyload/wiki/Upgrade-Guide), it's almost painless to upgrade!
 > 3.0.0 fixes the findDomNode warning through usage of React ref, and the following are the changes you need to be aware of
 
-* Now we have an extra div wrapping the lazy loaded component for the React ref to work 
-* We can understand that it is an extra DOM node, and we are working to optimize that if possible
-* It might break your UI or snapshot tests based on your usage
-* To customize the styling to the extra div please refer [here](#classNamePrefix)
-* Found any other problem, please feel free to leave a comment over [here](https://github.com/twobin/react-lazyload/issues/310)
+- Now we have an extra div wrapping the lazy loaded component for the React ref to work
+- We can understand that it is an extra DOM node, and we are working to optimize that if possible
+- It might break your UI or snapshot tests based on your usage
+- To customize the styling to the extra div please refer [here](#classNamePrefix)
+- Found any other problem, please feel free to leave a comment over [here](https://github.com/twobin/react-lazyload/issues/310)
 
 ```
 $ npm install --save react-lazyload
@@ -40,31 +46,27 @@ $ npm install --save react-lazyload
 ## Usage
 
 ```javascript
-import React from 'react';
-import ReactDOM from 'react-dom';
-import LazyLoad from 'react-lazyload';
-import MyComponent from './MyComponent';
+import React from "react";
+import ReactDOM from "react-dom";
+import LazyLoad from "react-lazyload";
+import MyComponent from "./MyComponent";
 
 const App = () => {
   return (
     <div className="list">
       <LazyLoad height={200}>
-        <img src="tiger.jpg" /> /*
-                                  Lazy loading images is supported out of box,
-                                  no extra config needed, set `height` for better
-                                  experience
-                                 */
+        <img src="tiger.jpg" /> /* Lazy loading images is supported out of box,
+        no extra config needed, set `height` for better experience */
       </LazyLoad>
-      <LazyLoad height={200} once >
-                                /* Once this component is loaded, LazyLoad will
-                                 not care about it anymore, set this to `true`
-                                 if you're concerned about improving performance */
+      <LazyLoad height={200} once>
+        /* Once this component is loaded, LazyLoad will not care about it
+        anymore, set this to `true` if you're concerned about improving
+        performance */
         <MyComponent />
       </LazyLoad>
       <LazyLoad height={200} offset={100}>
-                              /* This component will be loaded when it's top
-                                 edge is 100px from viewport. It's useful to
-                                 make user ignorant about lazy load effect. */
+        /* This component will be loaded when it's top edge is 100px from
+        viewport. It's useful to make user ignorant about lazy load effect. */
         <MyComponent />
       </LazyLoad>
       <LazyLoad>
@@ -80,12 +82,12 @@ ReactDOM.render(<App />, document.body);
 If you want to have your component lazyloaded by default, try this handy decorator:
 
 ```javascript
-import { lazyload } from 'react-lazyload';
+import { lazyload } from "react-lazyload";
 
 @lazyload({
   height: 200,
   once: true,
-  offset: 100
+  offset: 100,
 })
 class MyComponent extends React.Component {
   render() {
@@ -175,7 +177,6 @@ Type: Bool Default: false
 
 The lazy loaded component is unmounted and replaced by the placeholder when it is no longer visible in the viewport.
 
-
 ### debounce/throttle
 
 Type: Bool / Number Default: undefined
@@ -194,18 +195,15 @@ Type: String Default: `lazyload`
 
 While rendering, Lazyload will add some elements to the component tree in addition to the wrapped component children.
 
-The `classNamePrefix` prop allows the user to supply their own custom class prefix to help:
-    # Avoid class conflicts on an implementing app
-    # Allow easier custom styling
+The `classNamePrefix` prop allows the user to supply their own custom class prefix to help: # Avoid class conflicts on an implementing app # Allow easier custom styling
 
-These being:
-    # A wrapper div, which is present at all times (default )
-    
+These being: # A wrapper div, which is present at all times (default )
+
 ### style
 
 Type: Object Default: undefined
 
-Similar to [classNamePrefix](#classNamePrefix), the `style` prop allows users to pass custom CSS styles to wrapper div. 
+Similar to [classNamePrefix](#classNamePrefix), the `style` prop allows users to pass custom CSS styles to wrapper div.
 
 ### wheel
 
@@ -221,7 +219,7 @@ It is available to manually trigger checking for elements in viewport. Helpful w
 Import `forceCheck`:
 
 ```javascript
-import { forceCheck } from 'react-lazyload';
+import { forceCheck } from "react-lazyload";
 ```
 
 Then call the function:
@@ -235,7 +233,7 @@ forceCheck();
 Forces the component to display regardless of whether the element is visible in the viewport.
 
 ```javascript
-import { forceVisible } from 'react-lazyload';
+import { forceVisible } from "react-lazyload";
 ```
 
 Then call the function:
@@ -262,7 +260,6 @@ Using `LazyLoad` component will help ease this situation by only updating compon
 1. [lancehub](https://github.com/lancehub)
 2. [doug-wade](https://github.com/doug-wade)
 3. [ameerthehacker](https://github.com/ameerthehacker)
-
 
 ## License
 

@@ -2,7 +2,6 @@
  * react-lazyload
  */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
@@ -14,7 +13,7 @@ const defaultBoundingClientRect = {
   bottom: 0,
   left: 0,
   width: 0,
-  height: 0
+  height: 0,
 };
 const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
@@ -26,15 +25,13 @@ try {
   const opts = Object.defineProperty({}, 'passive', {
     get() {
       passiveEventSupported = true;
-    }
+    },
   });
   window.addEventListener('test', null, opts);
 } catch (e) {}
 // if they are supported, setup the optional params
 // IMPORTANT: FALSE doubles as the default CAPTURE value!
-const passiveEvent = passiveEventSupported
-  ? { capture: false, passive: true }
-  : false;
+const passiveEvent = passiveEventSupported ? { capture: false, passive: true } : false;
 
 /**
  * Check if `component` is visible in overflow container `parent`
@@ -51,33 +48,19 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   let parentWidth;
 
   try {
-    ({
-      top: parentTop,
-      left: parentLeft,
-      height: parentHeight,
-      width: parentWidth
-    } = parent.getBoundingClientRect());
+    ({ top: parentTop, left: parentLeft, height: parentHeight, width: parentWidth } = parent.getBoundingClientRect());
   } catch (e) {
-    ({
-      top: parentTop,
-      left: parentLeft,
-      height: parentHeight,
-      width: parentWidth
-    } = defaultBoundingClientRect);
+    ({ top: parentTop, left: parentLeft, height: parentHeight, width: parentWidth } = defaultBoundingClientRect);
   }
 
-  const windowInnerHeight =
-    window.innerHeight || document.documentElement.clientHeight;
-  const windowInnerWidth =
-    window.innerWidth || document.documentElement.clientWidth;
+  const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+  const windowInnerWidth = window.innerWidth || document.documentElement.clientWidth;
 
   // calculate top and height of the intersection of the element's scrollParent and viewport
   const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
   const intersectionLeft = Math.max(parentLeft, 0); // intersection's left relative to viewport
-  const intersectionHeight =
-    Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
-  const intersectionWidth =
-    Math.min(windowInnerWidth, parentLeft + parentWidth) - intersectionLeft; // width
+  const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
+  const intersectionWidth = Math.min(windowInnerWidth, parentLeft + parentWidth) - intersectionLeft; // width
 
   // check whether the element is visible in the intersection
   let top;
@@ -115,8 +98,7 @@ const checkNormalVisible = function checkNormalVisible(component) {
   const node = component.ref;
 
   // If this element is hidden by css rules somehow, it's definitely invisible
-  if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length))
-    return false;
+  if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length)) return false;
 
   let top;
   let elementHeight;
@@ -127,17 +109,13 @@ const checkNormalVisible = function checkNormalVisible(component) {
     ({ top, height: elementHeight } = defaultBoundingClientRect);
   }
 
-  const windowInnerHeight =
-    window.innerHeight || document.documentElement.clientHeight;
+  const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
 
   const offsets = Array.isArray(component.props.offset)
     ? component.props.offset
     : [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  return (
-    top - offsets[0] <= windowInnerHeight &&
-    top + elementHeight + offsets[1] >= 0
-  );
+  return top - offsets[0] <= windowInnerHeight && top + elementHeight + offsets[1] >= 0;
 };
 
 /**
@@ -158,9 +136,7 @@ const checkVisible = function checkVisible(component) {
     parent !== node.ownerDocument &&
     parent !== document &&
     parent !== document.documentElement;
-  const visible = isOverflow
-    ? checkOverflowVisible(component, parent)
-    : checkNormalVisible(component);
+  const visible = isOverflow ? checkOverflowVisible(component, parent) : checkNormalVisible(component);
   if (visible) {
     // Avoid extra render if previously is visible
     if (!component.visible) {
@@ -180,7 +156,7 @@ const checkVisible = function checkVisible(component) {
 };
 
 const purgePending = function purgePending() {
-  pending.forEach(component => {
+  pending.forEach((component) => {
     const index = listeners.indexOf(component);
     if (index !== -1) {
       listeners.splice(index, 1);
@@ -216,7 +192,7 @@ const forceVisible = () => {
 let delayType;
 let finalLazyLoadHandler = null;
 
-const isString = string => typeof string === 'string';
+const isString = (string) => typeof string === 'string';
 
 class LazyLoad extends Component {
   constructor(props) {
@@ -250,13 +226,13 @@ class LazyLoad extends Component {
       if (this.props.debounce !== undefined) {
         finalLazyLoadHandler = debounce(
           lazyLoadHandler,
-          typeof this.props.debounce === 'number' ? this.props.debounce : 300
+          typeof this.props.debounce === 'number' ? this.props.debounce : 300,
         );
         delayType = 'debounce';
       } else if (this.props.throttle !== undefined) {
         finalLazyLoadHandler = throttle(
           lazyLoadHandler,
-          typeof this.props.throttle === 'number' ? this.props.throttle : 300
+          typeof this.props.throttle === 'number' ? this.props.throttle : 300,
         );
         delayType = 'throttle';
       } else {
@@ -299,11 +275,7 @@ class LazyLoad extends Component {
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = +parent.getAttribute(LISTEN_FLAG) - 1;
         if (listenerCount === 0) {
-          parent.removeEventListener(
-            'scroll',
-            finalLazyLoadHandler,
-            passiveEvent
-          );
+          parent.removeEventListener('scroll', finalLazyLoadHandler, passiveEvent);
           parent.removeAttribute(LISTEN_FLAG);
         } else {
           parent.setAttribute(LISTEN_FLAG, listenerCount);
@@ -329,14 +301,7 @@ class LazyLoad extends Component {
   }
 
   render() {
-    const {
-      height,
-      children,
-      placeholder,
-      className,
-      classNamePrefix,
-      style
-    } = this.props;
+    const { height, children, placeholder, className, classNamePrefix, style } = this.props;
 
     return (
       <div className={`${classNamePrefix}-wrapper ${className}`} ref={this.setRef} style={style}>
@@ -345,10 +310,7 @@ class LazyLoad extends Component {
         ) : placeholder ? (
           placeholder
         ) : (
-          <div
-            style={{ height: height }}
-            className={`${classNamePrefix}-placeholder`}
-          />
+          <div style={{ height: height }} className={`${classNamePrefix}-placeholder`} />
         )}
       </div>
     );
@@ -360,10 +322,7 @@ LazyLoad.propTypes = {
   classNamePrefix: PropTypes.string,
   once: PropTypes.bool,
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  offset: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.arrayOf(PropTypes.number)
-  ]),
+  offset: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
   overflow: PropTypes.bool,
   resize: PropTypes.bool,
   scroll: PropTypes.bool,
@@ -373,7 +332,7 @@ LazyLoad.propTypes = {
   placeholder: PropTypes.node,
   scrollContainer: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   unmountIfInvisible: PropTypes.bool,
-  style: PropTypes.object
+  style: PropTypes.object,
 };
 
 LazyLoad.defaultProps = {
@@ -384,11 +343,10 @@ LazyLoad.defaultProps = {
   overflow: false,
   resize: false,
   scroll: true,
-  unmountIfInvisible: false
+  unmountIfInvisible: false,
 };
 
-const getDisplayName = WrappedComponent =>
-  WrappedComponent.displayName || WrappedComponent.name || 'Component';
+const getDisplayName = (WrappedComponent) => WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
 const decorator = (options = {}) =>
   function lazyload(WrappedComponent) {
